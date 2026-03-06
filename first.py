@@ -17,11 +17,23 @@ os.makedirs(TABLE_PATH, exist_ok=True)
 # ---------- Загрузка данных ----------
 df = pd.read_csv(DATA_PATH)
 
+original_rows, original_cols = df.shape
+print("\n--- Исходный датасет ---")
+print(f"Количество строк: {original_rows}")
+print(f"Количество признаков: {original_cols}")
+
 print("Размерность исходных данных:", df.shape)
 
 # Удаляем пропуски
 df = df.dropna()
-print("Размерность после удаления NaN:", df.shape)
+
+clean_rows, clean_cols = df.shape
+removed_rows = original_rows - clean_rows
+
+print("\n--- После удаления пропусков ---")
+print(f"Количество строк: {clean_rows}")
+print(f"Количество признаков: {clean_cols}")
+print(f"Удалено строк из-за пропусков: {removed_rows}")
 
 # Удаляем ID (если есть)
 if "Unnamed: 0" in df.columns:
@@ -34,7 +46,10 @@ if "SeriousDlqin2yrs" in df.columns:
 else:
     X = df.copy()
 
-print("Размерность матрицы признаков:", X.shape)
+x_rows, x_cols = X.shape
+print("\n--- Матрица признаков для PCA ---")
+print(f"Количество объектов: {x_rows}")
+print(f"Количество признаков: {x_cols}")
 
 # ---------- Стандартизация ----------
 scaler = StandardScaler()

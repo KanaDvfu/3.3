@@ -62,5 +62,18 @@ loadings = pd.DataFrame(
     index=features
 )
 
-loadings.to_csv("outputs/tables/pca_class1_loadings.csv")
-print(loadings[["PC1", "PC2"]].sort_values(by="PC1", key=abs, ascending=False).head(10))
+# ----- Анализ весов первой главной компоненты -----
+pc1_weights = loadings["PC1"].sort_values(key=abs, ascending=False)
+
+print("\n--- Веса первой главной компоненты (PC1) ---")
+print("Наибольший вклад признаков в PC1:")
+print(pc1_weights.head(10))
+
+# Сохраняем веса PC1 отдельно
+pc1_weights_df = pc1_weights.reset_index()
+pc1_weights_df.columns = ["Feature", "PC1_weight"]
+pc1_weights_df.to_csv("outputs/tables/pca_class1_pc1_weights_sorted.csv", index=False)
+
+# Дополнительная информация для интерпретации
+print("\nСумма модулей весов PC1:", np.sum(np.abs(loadings['PC1'])))
+print("Если большинство весов одного знака, PC1 отражает общий фактор (например, общую оценку курса).")
